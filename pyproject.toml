@@ -17,6 +17,7 @@ funcy = "^1.12"
 py-aiger = "^3.3.2"
 
 [tool.poetry.dev-dependencies]
+hypothesis_cfg = {git = "git://github.com/mvcisback/hypothesis-cfg.git"}
 hypothesis = "^4.28"
 pytest-cov = "^2.7"
 pytest-flake8 = "^1.0"
