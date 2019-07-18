@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import NamedTuple, List, Tuple, Mapping
+from typing import NamedTuple, List, Mapping
 
 import funcy as fn
 from bidict import bidict
