@@ -1,10 +1,37 @@
-from hypothesis import given
-from aiger import hypothesis as aigh
+from itertools import product
 
+import aiger
+import hypothesis.strategies as st
+from aiger import hypothesis as aigh
+from hypothesis import given
+from pysat.solvers import Glucose3
 
 from aiger_cnf import aig2cnf
 
 
-@given(aigh.Circuits)
-def test_smoke_aig2cnf(circ):
-    aig2cnf(circ.unroll(1))
+def gen_tests(new_vars, expr2, val):
+    for inputs in product(*((True, False),)*len(new_vars)):
+        inputs = dict(zip(new_vars, inputs))
+        inputs.update(val)
+        yield expr2(inputs)
+
+
+@given(aigh.Circuits, st.data())
+def test_aig2cnf(circ, data):
+    expr1 = aiger.BoolExpr(circ.unroll(1))
+    cnf = aig2cnf(expr1)
+    g = Glucose3()
+    for c in cnf.clauses:
+        g.add_clause(c)
+
+    test_input = {i: data.draw(st.booleans()) for i in expr1.inputs}
+    assumptions = []
+    for name, val in test_input.items():
+        if name not in cnf.symbol_table:
+            continue
+        sym = cnf.symbol_table[name]
+        if not val:
+            sym *= -1
+        assumptions.append(sym)
+
+    assert expr1(test_input) == g.solve(assumptions=assumptions)

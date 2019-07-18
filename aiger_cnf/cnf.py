@@ -37,6 +37,7 @@ def aig2cnf(circ, output=None):
 
     output = dict(circ.node_map)[output]
     symbol_table = defaultdict(fresh)  # maps input names to tseitin variables
+
     clauses, gates = [], {}  # maps gates to tseitin variables
     for gate in cmn.eval_order(circ):
         if isinstance(gate, aiger.aig.ConstFalse):
@@ -53,5 +54,5 @@ def aig2cnf(circ, output=None):
             clauses.append((gates[gate.left],                     -gates[gate]))  # noqa
             clauses.append((                    gates[gate.right], -gates[gate]))  # noqa
 
-    clauses.append([gates[output]])
+    clauses.append((gates[output],))
     return CNF(clauses, bidict(symbol_table), max_var)
