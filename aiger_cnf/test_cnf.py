@@ -6,5 +6,5 @@ from aiger_cnf import aig2cnf
 
 
 @given(aigh.Circuits)
-def smoke_test_aig2cnf():
-    aig2cnf(aigh.Circuits)
+def test_smoke_aig2cnf(circ):
+    aig2cnf(circ.unroll(1))
