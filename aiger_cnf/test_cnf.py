@@ -1,5 +1,3 @@
-from itertools import product
-
 import aiger
 import hypothesis.strategies as st
 from aiger import hypothesis as aigh
@@ -7,13 +5,6 @@ from hypothesis import given
 from pysat.solvers import Glucose3
 
 from aiger_cnf import aig2cnf
-
-
-def gen_tests(new_vars, expr2, val):
-    for inputs in product(*((True, False),)*len(new_vars)):
-        inputs = dict(zip(new_vars, inputs))
-        inputs.update(val)
-        yield expr2(inputs)
 
 
 @given(aigh.Circuits, st.data())
