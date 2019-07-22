@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import NamedTuple, List, Mapping
+from typing import NamedTuple, Tuple, List, Mapping
 
 import funcy as fn
 from bidict import bidict
@@ -9,7 +9,7 @@ import aiger.common as cmn
 
 
 class CNF(NamedTuple):
-    clauses: List[List[int]]
+    clauses: List[Tuple[int]]
     symbol_table: Mapping[str, int]
     max_var: int
 

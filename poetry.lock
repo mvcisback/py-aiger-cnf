@@ -143,6 +143,7 @@ hypothesis = "*"
 reference = "542f2504881e82121c916cabadcd0fb7a436026e"
 type = "git"
 url = "git://github.com/mvcisback/hypothesis-cfg.git"
+
 [[package]]
 category = "dev"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -261,6 +262,14 @@ version = "2.4.0"
 
 [[package]]
 category = "dev"
+description = ""
+name = "pypblib"
+optional = false
+python-versions = "*"
+version = "0.0.4"
+
+[[package]]
+category = "dev"
 description = "pytest: simple powerful testing with Python"
 name = "pytest"
 optional = false
@@ -342,6 +351,18 @@ six = "*"
 
 [[package]]
 category = "dev"
+description = "A Python library for prototyping with SAT oracles"
+name = "python-sat"
+optional = false
+python-versions = "*"
+version = "0.1.4.dev13"
+
+[package.dependencies]
+pypblib = ">=0.0.3"
+six = "*"
+
+[[package]]
+category = "dev"
 description = "Python HTTP for Humans."
 name = "requests"
 optional = false
@@ -403,7 +424,7 @@ python-versions = ">=2.7"
 version = "0.5.2"
 
 [metadata]
-content-hash = "067293654431a0ebb516262bfe3b45076dac9f3e5ef98535cee4ea9093fb47dd"
+content-hash = "2f6e8845d6dfde50e67d4d8167fdb0af05ab1bef65753a89e86a239943d32088"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -434,12 +455,14 @@ py-aiger = ["63299429592670e8abe32ad97b9c3855b169a5be61b3f8909f47371d968da755", 
 pycodestyle = ["95a2219d12372f05704562a14ec30bc76b05a5b297b21a5dfe3f6fac3491ae56", "e40a936c9a450ad81df37f549d676d127b1b66000a6c500caa2b085bc0ca976c"]
 pyflakes = ["17dbeb2e3f4d772725c777fabc446d5634d1038f234e77343108ce445ea69ce0", "d976835886f8c5b31d47970ed689944a0262b5f3afa00a5a7b4dc81e5449f8a2"]
 pyparsing = ["1873c03321fc118f4e9746baf201ff990ceb915f433f23b395f5580d1840cb2a", "9b6323ef4ab914af344ba97510e966d64ba91055d6b9afa6b30799340e89cc03"]
+pypblib = ["71dd930bf177ca38d6eeb473702d05df07e11f20382db0c766465297eaf49062"]
 pytest = ["6ef6d06de77ce2961156013e9dff62f1b2688aa04d0dc244299fe7d67e09370d", "a736fed91c12681a7b34617c8fcefe39ea04599ca72c608751c31d89579a3f77"]
 pytest-cov = ["2b097cde81a302e1047331b48cadacf23577e431b61e9c6f49a1170bbe3d3da6", "e00ea4fdde970725482f1f35630d12f074e121a23801aabf2ae154ec6bdd343a"]
 pytest-flake8 = ["4d225c13e787471502ff94409dcf6f7927049b2ec251c63b764a4b17447b60c0", "d7e2b6b274a255b7ae35e9224c85294b471a83b76ecb6bd53c337ae977a499af"]
 pytest-forked = ["5fe33fbd07d7b1302c95310803a5e5726a4ff7f19d5a542b7ce57c76fed8135f", "d352aaced2ebd54d42a65825722cb433004b4446ab5d2044851d9cc7a00c9e38"]
 pytest-sugar = ["26cf8289fe10880cbbc130bd77398c4e6a8b936d8393b116a5c16121d95ab283", "fcd87a74b2bce5386d244b49ad60549bfbc4602527797fac167da147983f58ab"]
 pytest-xdist = ["3489d91516d7847db5eaecff7a2e623dba68984835dbe6cedb05ae126c4fb17f", "501795cb99e567746f30fe78850533d4cd500c93794128e6ab9988e92a17b1f8"]
+python-sat = ["b7208f17b7a6cf10f7aacb242ea0b2169a05f8e4ef3165029b00280fbfc568b3"]
 requests = ["11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4", "9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31"]
 six = ["3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c", "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"]
 termcolor = ["1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b"]
