@@ -13,12 +13,6 @@ class CNF(NamedTuple):
     symbol_table: Mapping[str, int]
     max_var: int
 
-    def id2name(self, idx):
-        return self.symbol_table.inv[abs(idx)]
-
-    def name2id(self, name):
-        return self.symbol_table[name]
-
 
 def aig2cnf(circ, output=None):
     """Convert an AIGER circuit to CNF via the Tseitin transformation."""
