@@ -14,15 +14,13 @@ class CNF(NamedTuple):
     max_var: int
 
 
-def aig2cnf(circ, output=None, symbol_table=None):
+def aig2cnf(circ, output=None, symbol_table=None, max_var=0):
     """Convert an AIGER circuit to CNF via the Tseitin transformation."""
     circ = circ.aig  # Extract AIG from potential wrapper.
     assert len(circ.latches) == 0
     if output is None:
         assert len(circ.outputs) == 1
         output = fn.first(circ.outputs)
-
-    max_var = 0
 
     def fresh():
         nonlocal max_var
