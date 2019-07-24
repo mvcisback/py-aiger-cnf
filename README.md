@@ -6,6 +6,14 @@ Python library to convert between AIGER and CNF
 [![PyPI version](https://badge.fury.io/py/py-aiger-cnf.svg)](https://badge.fury.io/py/py-iager-cnf)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-toc again -->
+**Table of Contents**
+
+- [Installation](#installation)
+- [Usage](#usage)
+
+<!-- markdown-toc end -->
+
 # Installation
 
 If you just need to use `aiger_cnf`, you can just run:
