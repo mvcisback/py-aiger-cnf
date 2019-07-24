@@ -14,7 +14,7 @@ class CNF(NamedTuple):
     max_var: int
 
 
-def aig2cnf(circ, output=None):
+def aig2cnf(circ, output=None, symbol_table=None):
     """Convert an AIGER circuit to CNF via the Tseitin transformation."""
     circ = circ.aig  # Extract AIG from potential wrapper.
     assert len(circ.latches) == 0
@@ -30,7 +30,11 @@ def aig2cnf(circ, output=None):
         return max_var
 
     output = dict(circ.node_map)[output]
-    symbol_table = defaultdict(fresh)  # maps input names to tseitin variables
+    # maps input names to tseitin variables
+    if symbol_table is None:
+        symbol_table = {}
+
+    symbol_table = defaultdict(fresh, symbol_table)
 
     clauses, gates = [], {}  # maps gates to tseitin variables
     for gate in cmn.eval_order(circ):
