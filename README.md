@@ -30,8 +30,7 @@ run:
 # Usage
 
 The primary entry point for using `aiger_cnf` is the `aig2cnf`
-function which, unsurprisingly, maps `AIG` objects to `CNF`
-objects.
+function which, unsurprisingly, maps `AIG` objects to `CNF` objects.
 
 ```python
 import aiger
@@ -39,8 +38,17 @@ from aiger_cnf import aig2cnf
 
 x, y, z = map(aiger.atom, ('x', 'y', 'z'))
 expr = (x & y) | ~z
+cnf = aig2cnf(expr.aig)
+```
+
+Note that this library also supports `aiger` wrapper libraries so long
+as they export a `.aig` attribute. Thus, in our example, we could also
+write:
+
+```python
 cnf = aig2cnf(expr)
 ```
+
 
 The `CNF` object is a `NamedTuple` with the following three fields:
 
