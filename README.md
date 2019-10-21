@@ -42,7 +42,7 @@ cnf = aig2cnf(expr.aig)
 ```
 
 Note that this library also supports `aiger` wrapper libraries so long
-as they export a `.aig` attribute. Thus, in our example, we could also
+as they export a `.aig` attribute. Thus, could also
 write:
 
 ```python
