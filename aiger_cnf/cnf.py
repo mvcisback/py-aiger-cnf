@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import NamedTuple, Tuple, List, Mapping
+from typing import NamedTuple, Tuple, List, Mapping, Optional
 
 import funcy as fn
 from bidict import bidict
@@ -21,7 +21,7 @@ class SymbolTable(defaultdict):
 class CNF(NamedTuple):
     clauses: List[Tuple[int]]
     symbol_table: Mapping[str, int]
-    max_var: int
+    max_var: Optional[int] = None
 
 
 def aig2cnf(circ, output=None, symbol_table=None, max_var=0,
@@ -38,6 +38,8 @@ def aig2cnf(circ, output=None, symbol_table=None, max_var=0,
             nonlocal max_var
             max_var += 1
             return max_var
+    else:
+        max_var = None
 
     output = dict(circ.node_map)[output]
     # maps input names to tseitin variables
@@ -64,4 +66,5 @@ def aig2cnf(circ, output=None, symbol_table=None, max_var=0,
 
     if force_true:
         clauses.append((gates[output],))
+
     return CNF(clauses, bidict(symbol_table), max_var)

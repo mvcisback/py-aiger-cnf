@@ -26,3 +26,26 @@ def test_aig2cnf(circ, data):
         assumptions.append(sym)
 
     assert expr1(test_input) == g.solve(assumptions=assumptions)
+
+
+def test_fresh():
+    expr = aiger.atom('x') | aiger.atom('y')
+    count = -1
+
+    def fresh(_):
+        nonlocal count
+        count -= 1
+        return count
+
+    cnf = aig2cnf(expr, fresh=fresh)
+    assert cnf.max_var is None
+    assert all(x < 1 for x in cnf.symbol_table.values())
+
+
+def test_force_true():
+    expr = aiger.atom('x') | aiger.atom('y')
+
+    cnf1 = aig2cnf(expr, force_true=True)
+    cnf2 = aig2cnf(expr, force_true=False)
+    assert set(cnf1.clauses) > set(cnf2.clauses)
+    assert len(cnf1.clauses) == len(cnf2.clauses) + 1
