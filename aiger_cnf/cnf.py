@@ -27,7 +27,8 @@ class CNF(NamedTuple):
 def aig2cnf(circ, output=None, symbol_table=None, max_var=0,
             *, fresh=None, force_true=True):
     """Convert an AIGER circuit to CNF via the Tseitin transformation."""
-    circ = circ.aig  # Extract AIG from potential wrapper.
+    circ = aiger.to_aig(circ)
+
     assert len(circ.latches) == 0
     if output is None:
         assert len(circ.outputs) == 1
