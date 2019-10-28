@@ -18,9 +18,9 @@ def test_aig2cnf(circ, data):
     test_input = {i: data.draw(st.booleans()) for i in expr1.inputs}
     assumptions = []
     for name, val in test_input.items():
-        if name not in cnf.symbol_table:
+        if name not in cnf.input2lit:
             continue
-        sym = cnf.symbol_table[name]
+        sym = cnf.input2lit[name]
         if not val:
             sym *= -1
         assumptions.append(sym)
@@ -38,8 +38,7 @@ def test_fresh():
         return count
 
     cnf = aig2cnf(expr, fresh=fresh)
-    assert cnf.max_var is None
-    assert all(x < 1 for x in cnf.symbol_table.values())
+    assert all(x < 1 for x in cnf.output2lit.values())
 
 
 def test_force_true():

@@ -1,7 +1,6 @@
 from collections import defaultdict
-from typing import NamedTuple, Tuple, List, Mapping, Optional
+from typing import NamedTuple, Tuple, List, Mapping
 
-import funcy as fn
 from bidict import bidict
 
 import aiger
@@ -20,52 +19,58 @@ class SymbolTable(defaultdict):
 
 class CNF(NamedTuple):
     clauses: List[Tuple[int]]
-    symbol_table: Mapping[str, int]
-    max_var: Optional[int] = None
+    input2lit: Mapping[str, int]
+    output2lit: Mapping[str, int]
+    comments: Tuple[str]
 
 
-def aig2cnf(circ, output=None, symbol_table=None, max_var=0,
-            *, fresh=None, force_true=True):
+def aig2cnf(circ, *, outputs=None, fresh=None, force_true=True):
     """Convert an AIGER circuit to CNF via the Tseitin transformation."""
-    circ = aiger.to_aig(circ)
-
-    assert len(circ.latches) == 0
-    if output is None:
-        assert len(circ.outputs) == 1
-        output = fn.first(circ.outputs)
-
     if fresh is None:
+        max_var = 0
+
         def fresh(_):
             nonlocal max_var
             max_var += 1
             return max_var
-    else:
-        max_var = None
 
-    output = dict(circ.node_map)[output]
-    # maps input names to tseitin variables
-    if symbol_table is None:
-        symbol_table = {}
+    circ = aiger.to_aig(circ)
+    assert len(circ.latches) == 0
 
-    symbol_table = SymbolTable(fresh, symbol_table)
-
-    clauses, gates = [], {}  # maps gates to tseitin variables
+    clauses, seen_false, gate2lit = [], False, SymbolTable(fresh)
     for gate in cmn.eval_order(circ):
-        if isinstance(gate, aiger.aig.ConstFalse):
-            true_var = symbol_table[gate]
+        if isinstance(gate, aiger.aig.ConstFalse) and not seen_false:
+            seen_false = True
+            true_var = fresh(True)
+            gate2lit[gate] = -true_var
             clauses.append((true_var,))
-            gates[gate] = -true_var
+
         elif isinstance(gate, aiger.aig.Inverter):
-            gates[gate] = -gates[gate.input]
-        elif isinstance(gate, aiger.aig.Input):
-            gates[gate] = symbol_table[gate.name]
+            gate2lit[gate] = -gate2lit[gate.input]
+
         elif isinstance(gate, aiger.aig.AndGate):
-            gates[gate] = fresh(gate)
-            clauses.append((-gates[gate.left], -gates[gate.right],  gates[gate]))  # noqa
-            clauses.append((gates[gate.left],                     -gates[gate]))  # noqa
-            clauses.append((                    gates[gate.right], -gates[gate]))  # noqa
+            clauses.append((-gate2lit[gate.left], -gate2lit[gate.right],  gate2lit[gate]))  # noqa
+            clauses.append((gate2lit[gate.left],                         -gate2lit[gate]))  # noqa
+            clauses.append((                       gate2lit[gate.right], -gate2lit[gate]))  # noqa
+
+    in2lit = bidict({i: gate2lit[aiger.aig.Input(i)] for i in circ.inputs})
+
+    out2lit = bidict()
+    for name, gate in circ.node_map.items():
+        if not isinstance(gate, aiger.aig.Inverter):
+            out2lit[name] = gate2lit[gate]
+            continue
+
+        oldv = out2lit[name] = fresh(gate)
+        newv = gate2lit[gate]
+        clauses.append((-newv,  oldv))
+        clauses.append((newv,  -oldv))
 
     if force_true:
-        clauses.append((gates[output],))
+        if outputs is None:
+            outputs = circ.outputs
 
-    return CNF(clauses, bidict(symbol_table), max_var)
+        for name in outputs:
+            clauses.append((out2lit[name],))
+
+    return CNF(clauses, in2lit, out2lit, circ.comments)

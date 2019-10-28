@@ -55,8 +55,7 @@ The `CNF` object is a `NamedTuple` with the following three fields:
 1. `clauses`: A list of tuples of ints, e.g., `[(1,2,3), (-1,
    2)]`. Each integer represents a variable's id, with the sign
    indicating the polarity of the variable.
-2. `symbol_table`: A
-   [bidict](https://bidict.readthedocs.io/en/master/) from strings to
-   variable ids.
-3. `max_var`: The maximum (in absolute value) index present in
-   `clauses`.
+2. `input2lit`: A [bidict](https://bidict.readthedocs.io/en/master/)
+   from input names to variable ids.
+2. `output2lit`: A [bidict](https://bidict.readthedocs.io/en/master/)
+   from output names to variable ids.
