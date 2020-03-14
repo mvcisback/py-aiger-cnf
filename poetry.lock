@@ -399,7 +399,14 @@ description = "A Python library for prototyping with SAT oracles"
 name = "python-sat"
 optional = false
 python-versions = "*"
-version = "0.1.4.dev19"
+version = "0.1.5.dev7"
+
+[package.dependencies]
+six = "*"
+
+[package.extras]
+aiger = ["py-aiger-cnf (>=2.0.0)"]
+pblib = ["pypblib (>=0.0.3)"]
 
 [[package]]
 category = "dev"
@@ -635,7 +642,9 @@ pytest-xdist = [
     {file = "pytest_xdist-1.30.0-py2.py3-none-any.whl", hash = "sha256:a8569b027db70112b290911ce2ed732121876632fb3f40b1d39cd2f72f58b147"},
 ]
 python-sat = [
-    {file = "python-sat-0.1.4.dev19.tar.gz", hash = "sha256:c0e421d11abb3b34e421bb0063c018cc6f2c3d8c777914c3925d7aacc5dcae16"},
+    {file = "python-sat-0.1.5.dev7.tar.gz", hash = "sha256:582fe3974bcc41389a6cbada8bc51f2e7e040279ff807e16ca6fdd81f0d1c504"},
+    {file = "python_sat-0.1.5.dev7-cp27-cp27m-macosx_10_15_x86_64.whl", hash = "sha256:07eb6d7f5312c73326f7a4a26880fde8c61b725657d9386ddb851e19780f9bf6"},
+    {file = "python_sat-0.1.5.dev7-cp37-cp37m-macosx_10_15_x86_64.whl", hash = "sha256:037a09db1f3bee0e6c59d218ee06975accd8039e52e459718e837db0eb03ecb0"},
 ]
 requests = [
     {file = "requests-2.22.0-py2.py3-none-any.whl", hash = "sha256:9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31"},
