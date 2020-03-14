@@ -1,4 +1,5 @@
 import aiger
+import funcy as fn
 import hypothesis.strategies as st
 from aiger import hypothesis as aigh
 from hypothesis import given
@@ -48,3 +49,26 @@ def test_force_true():
     cnf2 = aig2cnf(expr, force_true=False)
     assert set(cnf1.clauses) > set(cnf2.clauses)
     assert len(cnf1.clauses) == len(cnf2.clauses) + 1
+
+
+def test_negation():
+    x, y, z = aiger.atoms('x', 'y', 'z')
+    expr1 = ~(x | y) & z
+    expr2 = ~expr1
+
+    count = 0
+
+    @fn.memoize
+    def fresh(x):
+        nonlocal count
+        count += 1
+        return count
+
+    cnf1 = aig2cnf(expr1, fresh=fresh, force_true=False)
+    cnf2 = aig2cnf(expr2, fresh=fresh, force_true=False)
+    assert set(cnf1.clauses) < set(cnf2.clauses)
+
+    new_clauses = set(cnf2.clauses) - set(cnf1.clauses)
+    assert len(new_clauses) == 2
+    # (5 => -6) /\ (-5 => 6)
+    assert new_clauses == {(-5, -6), (5, 6)}
