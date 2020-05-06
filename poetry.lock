@@ -268,7 +268,7 @@ description = "A python library for manipulating sequential and-inverter gates."
 name = "py-aiger"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "4.0.0"
+version = "4.1.1"
 
 [package.dependencies]
 attrs = ">=19.3,<20.0"
@@ -603,8 +603,8 @@ py = [
     {file = "py-1.8.0.tar.gz", hash = "sha256:dc639b046a6e2cff5bbe40194ad65936d6ba360b52b3c3fe1d08a82dd50b5e53"},
 ]
 py-aiger = [
-    {file = "py-aiger-4.0.0.tar.gz", hash = "sha256:22386503c83e972083c47220caa6007e7a9e0889fa14c19bea10c551f865287e"},
-    {file = "py_aiger-4.0.0-py3-none-any.whl", hash = "sha256:baf875c29ff5c70603d78c43a35b71b6b3b2a713daa3e802d16b52e45081eaf6"},
+    {file = "py-aiger-4.1.1.tar.gz", hash = "sha256:7e7b5aa91606cf701cc64f9a8d2641818c9467c2414ab5dbcee2a181fd267357"},
+    {file = "py_aiger-4.1.1-py3-none-any.whl", hash = "sha256:c01e363111768b53c2236dbe1b791f3331e066f0be3d71a3adce6c4a2b190a16"},
 ]
 pycodestyle = [
     {file = "pycodestyle-2.5.0-py2.py3-none-any.whl", hash = "sha256:95a2219d12372f05704562a14ec30bc76b05a5b297b21a5dfe3f6fac3491ae56"},

@@ -1,10 +1,9 @@
 from collections import defaultdict
 from typing import NamedTuple, Tuple, List, Mapping
 
-from bidict import bidict
-
 import aiger
-import aiger.common as cmn
+import funcy as fn
+from bidict import bidict
 
 
 class SymbolTable(defaultdict):
@@ -38,20 +37,25 @@ def aig2cnf(circ, *, outputs=None, fresh=None, force_true=True):
     assert len(circ.latches) == 0
 
     clauses, seen_false, gate2lit = [], False, SymbolTable(fresh)
-    for gate in cmn.eval_order(circ):
-        if isinstance(gate, aiger.aig.ConstFalse) and not seen_false:
-            seen_false = True
-            true_var = fresh(True)
-            gate2lit[gate] = -true_var
-            clauses.append((true_var,))
+    prev, tbl = set(), {}
+    for node_batch in circ.__iter_nodes__():  # Support lazy iteration.
+        prev = set(tbl.keys()) - prev
+        tbl = fn.project(tbl, prev)  # Forget about unnecessary gates.
 
-        elif isinstance(gate, aiger.aig.Inverter):
-            gate2lit[gate] = -gate2lit[gate.input]
+        for gate in node_batch:
+            if isinstance(gate, aiger.aig.ConstFalse) and not seen_false:
+                seen_false = True
+                true_var = fresh(True)
+                gate2lit[gate] = -true_var
+                clauses.append((true_var,))
 
-        elif isinstance(gate, aiger.aig.AndGate):
-            clauses.append((-gate2lit[gate.left], -gate2lit[gate.right],  gate2lit[gate]))  # noqa
-            clauses.append((gate2lit[gate.left],                         -gate2lit[gate]))  # noqa
-            clauses.append((                       gate2lit[gate.right], -gate2lit[gate]))  # noqa
+            elif isinstance(gate, aiger.aig.Inverter):
+                gate2lit[gate] = -gate2lit[gate.input]
+
+            elif isinstance(gate, aiger.aig.AndGate):
+                clauses.append((-gate2lit[gate.left], -gate2lit[gate.right],  gate2lit[gate]))  # noqa
+                clauses.append((gate2lit[gate.left],                         -gate2lit[gate]))  # noqa
+                clauses.append((                       gate2lit[gate.right], -gate2lit[gate]))  # noqa
 
     in2lit = bidict({i: gate2lit[aiger.aig.Input(i)] for i in circ.inputs})
 
