@@ -14,7 +14,7 @@ packages = [
 python = "^3.6"
 bidict = "^0.18.0"
 funcy = "^1.12"
-py-aiger = "^5.0.0"
+py-aiger = "^5.1.0"
 
 [tool.poetry.dev-dependencies]
 hypothesis_cfg = {git = "git://github.com/mvcisback/hypothesis-cfg.git"}

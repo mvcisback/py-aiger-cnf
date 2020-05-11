@@ -271,7 +271,7 @@ description = "A python library for manipulating sequential and-inverter gates."
 name = "py-aiger"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "5.0.0"
+version = "5.1.0"
 
 [package.dependencies]
 attrs = ">=19.3,<20.0"
@@ -481,7 +481,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "a492493a3630613a7401cf5085f6809a0996b12d573e034f77bc9459df5a3e35"
+content-hash = "3e5d4d2c349d9826b952eb37848d60697a5e2e2c050784e7b9e9b47fe17840f6"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -602,8 +602,8 @@ py = [
     {file = "py-1.8.1.tar.gz", hash = "sha256:5e27081401262157467ad6e7f851b7aa402c5852dbcb3dae06768434de5752aa"},
 ]
 py-aiger = [
-    {file = "py-aiger-5.0.0.tar.gz", hash = "sha256:54671211ee2f97fa6e0d78938c5c590d13f4412db328478e9978eda0e8770866"},
-    {file = "py_aiger-5.0.0-py3-none-any.whl", hash = "sha256:2672b3a87b421d5603023bcb601284bffaa71826b2d88595a2e6ae90e9248a33"},
+    {file = "py-aiger-5.1.0.tar.gz", hash = "sha256:814279adeda1664508d0b9a2b06d91b2e732f4db1b713f6f4d985095e13c4d74"},
+    {file = "py_aiger-5.1.0-py3-none-any.whl", hash = "sha256:f7a4e459d4a07ca09fa258c9054b8d03fa364da3f936c8048ec359bd29b397cc"},
 ]
 pycodestyle = [
     {file = "pycodestyle-2.5.0-py2.py3-none-any.whl", hash = "sha256:95a2219d12372f05704562a14ec30bc76b05a5b297b21a5dfe3f6fac3491ae56"},

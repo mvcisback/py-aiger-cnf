@@ -38,21 +38,21 @@ def aig2cnf(circ, *, outputs=None, fresh=None, force_true=True):
             max_var += 1
             return max_var
 
-    circ = aiger.to_aig(circ)
+    circ = aiger.to_aig(circ, allow_lazy=True)
     assert len(circ.latches) == 0
 
     # Define Boolean Algebra over clauses.
     clauses, gate2lit = [], SymbolTable(fresh)
 
     @attr.s(auto_attribs=True, frozen=True)
-    class Lit:
+    class LitWrapper:
         lit: Hashable
         gate: Node
 
         @fn.memoize
         def __and__(self, other):
             gate = AndGate(self.gate, other.gate)
-            wrapped = Lit(gate2lit[gate], gate)
+            wrapped = LitWrapper(gate2lit[gate], gate)
 
             out, left, right = wrapped.lit, self.lit, other.lit
             clauses.append((-left, -right, out))     # (left /\ right) -> out
@@ -63,15 +63,15 @@ def aig2cnf(circ, *, outputs=None, fresh=None, force_true=True):
         def __invert__(self):
             gate = Inverter(self.gate)
             gate2lit[gate] = -self.lit
-            return Lit(gate2lit[gate], gate)
+            return LitWrapper(gate2lit[gate], gate)
 
-    def lift(obj) -> Lit:
+    def lift(obj) -> LitWrapper:
         assert isinstance(obj, (Input, bool))
         if isinstance(obj, bool):
             assert not obj
             obj = ConstFalse()
 
-        return Lit(gate2lit[obj], obj)
+        return LitWrapper(gate2lit[obj], obj)
 
     # Interpret circ over Lit Boolean Algebra.
     inputs = {i: aiger.aig.Input(i) for i in circ.inputs}
