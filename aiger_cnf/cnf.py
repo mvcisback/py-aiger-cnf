@@ -43,7 +43,7 @@ def aig2cnf(circ, *, outputs=None, fresh=None, force_true=True):
 
     # Define Boolean Algebra over clauses.
     clauses, gate2lit = [], SymbolTable(fresh)
-    
+
     @attr.s(auto_attribs=True, frozen=True)
     class Lit:
         lit: Hashable
