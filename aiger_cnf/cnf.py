@@ -1,8 +1,10 @@
 from collections import defaultdict
-from typing import NamedTuple, Tuple, List, Mapping
+from typing import NamedTuple, Tuple, List, Mapping, Hashable
 
+import attr
 import aiger
 import funcy as fn
+from aiger.aig import Node, Inverter, ConstFalse, AndGate, Input
 from bidict import bidict
 
 
@@ -11,9 +13,12 @@ class SymbolTable(defaultdict):
         super().__init__(None, *args, **kwargs)
         self.func = func
 
-    def __missing__(self, key):
-        self[key] = val = self.func(key)
-        return val
+    def __missing__(self, key: Node):
+        if isinstance(key, ConstFalse):
+            self[key] = -self[Inverter(key)]
+        else:
+            self[key] = self.func(key)
+        return self[key]
 
 
 class CNF(NamedTuple):
@@ -36,33 +41,51 @@ def aig2cnf(circ, *, outputs=None, fresh=None, force_true=True):
     circ = aiger.to_aig(circ)
     assert len(circ.latches) == 0
 
-    clauses, seen_false, gate2lit = [], False, SymbolTable(fresh)
-    prev, tbl = set(), {}
-    for node_batch in circ.__iter_nodes__():  # Support lazy iteration.
-        prev = set(tbl.keys()) - prev
-        tbl = fn.project(tbl, prev)  # Forget about unnecessary gates.
+    # Define Boolean Algebra over clauses.
+    clauses, gate2lit = [], SymbolTable(fresh)
+    
+    @attr.s(auto_attribs=True, frozen=True)
+    class Lit:
+        lit: Hashable
+        gate: Node
 
-        for gate in node_batch:
-            if isinstance(gate, aiger.aig.ConstFalse) and not seen_false:
-                seen_false = True
-                true_var = fresh(True)
-                gate2lit[gate] = -true_var
-                clauses.append((true_var,))
+        @fn.memoize
+        def __and__(self, other):
+            gate = AndGate(self.gate, other.gate)
+            wrapped = Lit(gate2lit[gate], gate)
 
-            elif isinstance(gate, aiger.aig.Inverter):
-                gate2lit[gate] = -gate2lit[gate.input]
+            out, left, right = wrapped.lit, self.lit, other.lit
+            clauses.append((-left, -right, out))     # (left /\ right) -> out
+            clauses.append((-out, left))             # out -> left
+            clauses.append((-out, right))            # out -> right
+            return wrapped
 
-            elif isinstance(gate, aiger.aig.AndGate):
-                clauses.append((-gate2lit[gate.left], -gate2lit[gate.right],  gate2lit[gate]))  # noqa
-                clauses.append((gate2lit[gate.left],                         -gate2lit[gate]))  # noqa
-                clauses.append((                       gate2lit[gate.right], -gate2lit[gate]))  # noqa
+        def __invert__(self):
+            gate = Inverter(self.gate)
+            gate2lit[gate] = -self.lit
+            return Lit(gate2lit[gate], gate)
 
+    def lift(obj) -> Lit:
+        assert isinstance(obj, (Input, bool))
+        if isinstance(obj, bool):
+            assert not obj
+            obj = ConstFalse()
+
+        return Lit(gate2lit[obj], obj)
+
+    # Interpret circ over Lit Boolean Algebra.
+    inputs = {i: aiger.aig.Input(i) for i in circ.inputs}
+    out2lit, _ = circ(inputs=inputs, lift=lift)
+    out2lit = {k: v.lit for k, v in out2lit.items()}  # Remove Lit wrapper.
     in2lit = bidict({i: gate2lit[aiger.aig.Input(i)] for i in circ.inputs})
 
-    out2lit = bidict()
+    # Force True/False variable to be true/false.
+    if ConstFalse() in gate2lit:
+        clauses.append((-gate2lit[ConstFalse()],))
+
+    # Force outputs to appear as positive variables.
     for name, gate in circ.node_map.items():
         if not isinstance(gate, aiger.aig.Inverter):
-            out2lit[name] = gate2lit[gate]
             continue
 
         oldv = out2lit[name] = fresh(gate)
