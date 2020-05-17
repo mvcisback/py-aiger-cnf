@@ -178,6 +178,7 @@ hypothesis = "*"
 reference = "fee01c6d8c36f33501b71ff0e84b342829968ddf"
 type = "git"
 url = "git://github.com/mvcisback/hypothesis-cfg.git"
+
 [[package]]
 category = "dev"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -270,8 +271,8 @@ category = "main"
 description = "A python library for manipulating sequential and-inverter gates."
 name = "py-aiger"
 optional = false
-python-versions = ">=3.6,<4.0"
-version = "5.1.0"
+python-versions = ">=3.7,<4.0"
+version = "6.0.0"
 
 [package.dependencies]
 attrs = ">=19.3,<20.0"
@@ -280,6 +281,17 @@ funcy = ">=1.12,<2.0"
 parsimonious = ">=0.8.1,<0.9.0"
 pyrsistent = ">=0.15.4,<0.16.0"
 toposort = ">=1.5,<2.0"
+
+[[package]]
+category = "dev"
+description = "Library for generating (p)ast (t)ense (l)inear (t)emporal (l)ogic monitors as aiger circuits."
+name = "py-aiger-ptltl"
+optional = false
+python-versions = ">=3.7,<4.0"
+version = "3.0.0"
+
+[package.dependencies]
+py-aiger = ">=6.0.0,<7.0.0"
 
 [[package]]
 category = "dev"
@@ -481,7 +493,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "697fd4f33fe318fb05fa115c0e558e3f401c59f4dfebbca152b7952786abe630"
+content-hash = "506d9363f2ac01b360c4bba2bf5caf03162bf614f8bd4cab077f170d9d7243d8"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -602,8 +614,12 @@ py = [
     {file = "py-1.8.1.tar.gz", hash = "sha256:5e27081401262157467ad6e7f851b7aa402c5852dbcb3dae06768434de5752aa"},
 ]
 py-aiger = [
-    {file = "py-aiger-5.1.0.tar.gz", hash = "sha256:814279adeda1664508d0b9a2b06d91b2e732f4db1b713f6f4d985095e13c4d74"},
-    {file = "py_aiger-5.1.0-py3-none-any.whl", hash = "sha256:f7a4e459d4a07ca09fa258c9054b8d03fa364da3f936c8048ec359bd29b397cc"},
+    {file = "py-aiger-6.0.0.tar.gz", hash = "sha256:48357d1dcbd99fae0474dc779ca2726eea37cf82f7bebeb67f596a1a2718ad96"},
+    {file = "py_aiger-6.0.0-py3-none-any.whl", hash = "sha256:82dd9a112073628bddf6eb00bda34754e63ffb92a35363a55cccc0c3c6f7a105"},
+]
+py-aiger-ptltl = [
+    {file = "py-aiger-ptltl-3.0.0.tar.gz", hash = "sha256:507d2d9c1e8a49f448d950d78f9fc2471cde419382dc2022565dee6a2e1434a6"},
+    {file = "py_aiger_ptltl-3.0.0-py3-none-any.whl", hash = "sha256:60d3ee9850ab4858f73b1da49490e10f83ad1b461b7b0a338317cd96f44cb43c"},
 ]
 pycodestyle = [
     {file = "pycodestyle-2.5.0-py2.py3-none-any.whl", hash = "sha256:95a2219d12372f05704562a14ec30bc76b05a5b297b21a5dfe3f6fac3491ae56"},
