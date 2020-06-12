@@ -1,9 +1,8 @@
 from collections import defaultdict
-from typing import NamedTuple, Tuple, List, Mapping, Hashable
+from typing import NamedTuple, Tuple, List, Mapping, Union
 
 import attr
 import aiger
-import funcy as fn
 from aiger.aig import Node, Inverter, ConstFalse, AndGate, Input
 from bidict import bidict
 
@@ -21,14 +20,48 @@ class SymbolTable(defaultdict):
         return self[key]
 
 
+Clause = Union[Tuple[int], Tuple[int, int], Tuple[int, int, int]]
+Clauses = List[Clause]
+
+
 class CNF(NamedTuple):
-    clauses: List[Tuple[int]]
+    clauses: Clauses
     input2lit: Mapping[str, int]
     output2lit: Mapping[str, int]
     comments: Tuple[str]
 
 
-def aig2cnf(circ, *, outputs=None, fresh=None, force_true=True):
+@attr.s(auto_attribs=True, frozen=True)
+class LitWrapper:
+    gate: Node
+    gate2lit: Mapping[Node, int]
+    clauses: Clauses
+
+    @property
+    def lit(self) -> int:
+        return self.gate2lit[self.gate]
+
+    def evolve(self, gate):
+        return attr.evolve(self, gate=gate)
+
+    def __and__(self, other):
+        wrapped = self.evolve(AndGate(self.gate, other.gate))
+
+        if wrapped.gate not in wrapped.gate2lit:  # Avoid redundant clauses.
+            out, left, right = wrapped.lit, self.lit, other.lit
+            self.clauses.append((-left, -right, out))  # (left /\ right) -> out
+            self.clauses.append((-out, left))          # out -> left
+            self.clauses.append((-out, right))         # out -> right
+
+        return wrapped
+
+    def __invert__(self):
+        gate = Inverter(self.gate)
+        self.gate2lit[gate] = -self.lit
+        return self.evolve(gate)
+
+
+def aig2cnf(circ, *, outputs=None, fresh=None, force_true=True) -> CNF:
     """Convert an AIGER circuit to CNF via the Tseitin transformation."""
     if fresh is None:
         max_var = 0
@@ -41,29 +74,8 @@ def aig2cnf(circ, *, outputs=None, fresh=None, force_true=True):
     circ = aiger.to_aig(circ, allow_lazy=True)
     assert len(circ.latches) == 0
 
-    # Define Boolean Algebra over clauses.
+    # Interpret circuit over Lit Boolean Algebra.
     clauses, gate2lit = [], SymbolTable(fresh)
-
-    @attr.s(auto_attribs=True, frozen=True)
-    class LitWrapper:
-        lit: Hashable
-        gate: Node
-
-        @fn.memoize
-        def __and__(self, other):
-            gate = AndGate(self.gate, other.gate)
-            wrapped = LitWrapper(gate2lit[gate], gate)
-
-            out, left, right = wrapped.lit, self.lit, other.lit
-            clauses.append((-left, -right, out))     # (left /\ right) -> out
-            clauses.append((-out, left))             # out -> left
-            clauses.append((-out, right))            # out -> right
-            return wrapped
-
-        def __invert__(self):
-            gate = Inverter(self.gate)
-            gate2lit[gate] = -self.lit
-            return LitWrapper(gate2lit[gate], gate)
 
     def lift(obj) -> LitWrapper:
         assert isinstance(obj, (Input, bool))
@@ -71,9 +83,9 @@ def aig2cnf(circ, *, outputs=None, fresh=None, force_true=True):
             assert not obj
             obj = ConstFalse()
 
-        return LitWrapper(gate2lit[obj], obj)
+        gate2lit[obj]  # defaultdict. force add literal for obj.
+        return LitWrapper(gate=obj, gate2lit=gate2lit, clauses=clauses)
 
-    # Interpret circ over Lit Boolean Algebra.
     inputs = {i: aiger.aig.Input(i) for i in circ.inputs}
     out2lit, _ = circ(inputs=inputs, lift=lift)
     out2lit = {k: v.lit for k, v in out2lit.items()}  # Remove Lit wrapper.
