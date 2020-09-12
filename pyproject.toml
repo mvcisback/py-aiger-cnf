@@ -12,18 +12,18 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
-bidict = "^0.18.0"
+bidict = "^0.21.0"
 funcy = "^1.12"
 py-aiger = "^6.0.0"
 
 [tool.poetry.dev-dependencies]
 hypothesis_cfg = {git = "git://github.com/mvcisback/hypothesis-cfg.git"}
-hypothesis = "4.42.0"
+hypothesis = "^5.0.0"
 pytest-cov = "^2.7"
 pytest-flake8 = "^1.0"
-pytest-xdist = "^1.29"
+pytest-xdist = "^2.0.0"
 codecov = "^2.0"
-python-sat = "^0.1.5-alpha.13"
+python-sat = "^0.1.6.dev6"
 py-aiger-ptltl = "^3.0.0"
 
 [build-system]
