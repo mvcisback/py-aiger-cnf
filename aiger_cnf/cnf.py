@@ -88,8 +88,8 @@ def aig2cnf(circ, *, outputs=None, fresh=None, force_true=True):
         if not isinstance(gate, aiger.aig.Inverter):
             continue
 
-        oldv = out2lit[name] = fresh(gate)
-        newv = gate2lit[gate]
+        oldv = out2lit[name]
+        newv = out2lit[name] = fresh(gate)
         clauses.append((-newv,  oldv))
         clauses.append((newv,  -oldv))
 
