@@ -69,6 +69,9 @@ def test_negation():
     assert set(cnf1.clauses) < set(cnf2.clauses)
 
     new_clauses = set(cnf2.clauses) - set(cnf1.clauses)
+    new_clauses = {frozenset(x) for x in new_clauses}
+
     assert len(new_clauses) == 2
+
     # (5 => -6) /\ (-5 => 6)
-    assert new_clauses == {(-5, -6), (5, 6)}
+    assert new_clauses == {frozenset([-5, -6]), frozenset([5, 6])}
