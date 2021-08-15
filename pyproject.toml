@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "py-aiger-cnf"
 readme="README.md"
-version = "5.0.1"
+version = "5.0.2"
 repository = "https://github.com/mvcisback/py-aiger-cnf"
 description = "Python library to convert between AIGER and CNF"
 authors = ["Marcell Vazquez-Chanlatte <mvc@linux.com>"]
