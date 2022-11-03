@@ -23,6 +23,7 @@ hypothesis = "^6.0.0"
 pytest-xdist = "^2.0.0"
 python-sat = "^0.1.6.dev6"
 py-aiger-ptltl = "^3.0.0"
+parsimonious = "^0.10.0"
 
 [build-system]
 requires = ["poetry>=0.12"]
