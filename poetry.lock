@@ -169,14 +169,6 @@ dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
-name = "py"
-version = "1.11.0"
-description = "library with cross-python path, ini-parsing, io, code, log facilities"
-category = "dev"
-optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-
-[[package]]
 name = "py-aiger"
 version = "6.1.26"
 description = "A python library for manipulating sequential and-inverter gates."
@@ -194,7 +186,7 @@ toposort = ">=1.5,<2.0"
 
 [[package]]
 name = "py-aiger-ptltl"
-version = "3.1.0"
+version = "3.1.2"
 description = "Library for generating (p)ast (t)ense (l)inear (t)emporal (l)ogic monitors as aiger circuits."
 category = "dev"
 optional = false
@@ -247,20 +239,8 @@ tomli = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "xmlschema"]
 
 [[package]]
-name = "pytest-forked"
-version = "1.4.0"
-description = "run tests in isolated forked subprocesses"
-category = "dev"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-py = "*"
-pytest = ">=3.10"
-
-[[package]]
 name = "pytest-xdist"
-version = "2.5.0"
+version = "3.0.2"
 description = "pytest xdist plugin for distributed testing and loop-on-failing modes"
 category = "dev"
 optional = false
@@ -269,7 +249,6 @@ python-versions = ">=3.6"
 [package.dependencies]
 execnet = ">=1.1"
 pytest = ">=6.2.0"
-pytest-forked = "*"
 
 [package.extras]
 psutil = ["psutil (>=3.0)"]
@@ -354,7 +333,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "flake8 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "b7e670ac4e69c6013802c1aa02ea7eb8203fd89014aeb21cce87388054f9f6c8"
+content-hash = "aa2d411e6276ecd3f2a57e336858d3aceba2586819f952eaebfcb3073c22a905"
 
 [metadata.files]
 attrs = [
@@ -406,17 +385,13 @@ pluggy = [
     {file = "pluggy-1.0.0-py2.py3-none-any.whl", hash = "sha256:74134bbf457f031a36d68416e1509f34bd5ccc019f0bcc952c7b909d06b37bd3"},
     {file = "pluggy-1.0.0.tar.gz", hash = "sha256:4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159"},
 ]
-py = [
-    {file = "py-1.11.0-py2.py3-none-any.whl", hash = "sha256:607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378"},
-    {file = "py-1.11.0.tar.gz", hash = "sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719"},
-]
 py-aiger = [
     {file = "py-aiger-6.1.26.tar.gz", hash = "sha256:ab36946c033488fbf8d66171a10cf9e74b323685d63828f3f43ff7bf9f107aef"},
     {file = "py_aiger-6.1.26-py3-none-any.whl", hash = "sha256:51d318f959867adc35c98a1a481465c08452d46c065608f701ad55a0fcb837f6"},
 ]
 py-aiger-ptltl = [
-    {file = "py-aiger-ptltl-3.1.0.tar.gz", hash = "sha256:f1bbd5b7259e6e83020e07676ed22ccf71bb3b04ad9d5cb7bf231b76ef8bf1b8"},
-    {file = "py_aiger_ptltl-3.1.0-py3-none-any.whl", hash = "sha256:c146cfeb94d553f7ecba1924648cc3443ebdf848a812214115c28337b41160d6"},
+    {file = "py-aiger-ptltl-3.1.2.tar.gz", hash = "sha256:84f383c740603414ca1194497b43302ac18e524ae3d2ba63e829b1221be46728"},
+    {file = "py_aiger_ptltl-3.1.2-py3-none-any.whl", hash = "sha256:cb64d2a1699cbb1a8940d619912303079a958726c59b9862f469f896387247ae"},
 ]
 pyparsing = [
     {file = "pyparsing-3.0.9-py3-none-any.whl", hash = "sha256:5026bae9a10eeaefb61dab2f09052b9f4307d44aee4eda64b309723d8d206bbc"},
@@ -450,13 +425,9 @@ pytest = [
     {file = "pytest-7.2.0-py3-none-any.whl", hash = "sha256:892f933d339f068883b6fd5a459f03d85bfcb355e4981e146d2c7616c21fef71"},
     {file = "pytest-7.2.0.tar.gz", hash = "sha256:c4014eb40e10f11f355ad4e3c2fb2c6c6d1919c73f3b5a433de4708202cade59"},
 ]
-pytest-forked = [
-    {file = "pytest-forked-1.4.0.tar.gz", hash = "sha256:8b67587c8f98cbbadfdd804539ed5455b6ed03802203485dd2f53c1422d7440e"},
-    {file = "pytest_forked-1.4.0-py3-none-any.whl", hash = "sha256:bbbb6717efc886b9d64537b41fb1497cfaf3c9601276be8da2cccfea5a3c8ad8"},
-]
 pytest-xdist = [
-    {file = "pytest-xdist-2.5.0.tar.gz", hash = "sha256:4580deca3ff04ddb2ac53eba39d76cb5dd5edeac050cb6fbc768b0dd712b4edf"},
-    {file = "pytest_xdist-2.5.0-py3-none-any.whl", hash = "sha256:6fe5c74fec98906deb8f2d2b616b5c782022744978e7bd4695d39c8f42d0ce65"},
+    {file = "pytest-xdist-3.0.2.tar.gz", hash = "sha256:688da9b814370e891ba5de650c9327d1a9d861721a524eb917e620eec3e90291"},
+    {file = "pytest_xdist-3.0.2-py3-none-any.whl", hash = "sha256:9feb9a18e1790696ea23e1434fa73b325ed4998b0e9fcb221f16fd1945e6df1b"},
 ]
 python-sat = [
     {file = "python-sat-0.1.7.dev19.tar.gz", hash = "sha256:25ba9d70814fb241ef598e8a7690ccab3c8a877238ec04e0ab991f794d8c8e84"},

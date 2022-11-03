@@ -20,7 +20,7 @@ py-aiger = "^6.0.0"
 
 hypothesis_cfg = {git = "https://github.com/mvcisback/hypothesis-cfg.git"}
 hypothesis = "^6.0.0"
-pytest-xdist = "^2.0.0"
+pytest-xdist = "^3.0.0"
 python-sat = "^0.1.6.dev6"
 py-aiger-ptltl = "^3.0.0"
 parsimonious = "^0.10.0"
