@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "py-aiger-cnf"
 readme="README.md"
-version = "5.0.4"
+version = "5.0.5"
 repository = "https://github.com/mvcisback/py-aiger-cnf"
 description = "Python library to convert between AIGER and CNF"
 authors = ["Marcell Vazquez-Chanlatte <mvc@linux.com>"]
@@ -17,10 +17,9 @@ funcy = "^1.12"
 py-aiger = "^6.0.0"
 
 [tool.poetry.dev-dependencies]
-hypothesis_cfg = {git = "git://github.com/mvcisback/hypothesis-cfg.git"}
-hypothesis = "^5.0.0"
-pytest-cov = "^2.7"
-pytest-flake8 = "^1.0"
+
+hypothesis_cfg = {git = "https://github.com/mvcisback/hypothesis-cfg.git"}
+hypothesis = "^6.0.0"
 pytest-xdist = "^2.0.0"
 python-sat = "^0.1.6.dev6"
 py-aiger-ptltl = "^3.0.0"
